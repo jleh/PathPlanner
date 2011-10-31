@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class PathPlanner {
 
     static readData reader = new readData();
+    static CalculateRoute calculator = new CalculateRoute();
     /**
      * @param args the command line arguments
      */
@@ -20,5 +21,6 @@ public class PathPlanner {
         ArrayList<Kaupunki> kaupungit;
         
         kaupungit = reader.readFile("map.100");
+        calculator.calculateRoute(kaupungit);
     }
 }

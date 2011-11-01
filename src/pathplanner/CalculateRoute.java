@@ -4,7 +4,6 @@
  */
 package pathplanner;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -19,6 +18,7 @@ public class CalculateRoute {
     ArrayList<Path> katsotut = new ArrayList<Path>();
     boolean kaikki = false;
     Path polku;
+    Kaupunki edellinen = new Kaupunki();
     
     public void calculateRoute(ArrayList<Kaupunki> lista){//Heuristinen etsintä
         Kaupunki k = lista.get(0);
@@ -29,15 +29,14 @@ public class CalculateRoute {
 
 
         //Hakualgoritmi
-        while(!solmulista.isEmpty()){
-            
-            polku = solmulista.removeFirst();
+               while(!solmulista.isEmpty()){
 
+            polku = solmulista.removeFirst();
             k = polku.b;
 
             if(k.nimi == 0 && kaikki == true){
                 System.out.println("Reitti löyty :)");
-                break;
+                return;
             }
 
 
@@ -47,7 +46,7 @@ public class CalculateRoute {
                 vieraillut.add(k);
             
             System.out.println("Nyk:" + k.nimi + " Vier:" + vieraillut.size()
-                    + " Listalla: " + solmulista.size() + " seur: " + solmulista.getFirst().toString()); //For debug
+                    + " Listalla: " + solmulista.size());// + " seur: " + solmulista.getFirst().toString()); //For debug
             
             if(vieraillut.size() == solmulista.size()){ //Kun on käyty kaikissa
                 kaikki = true;
@@ -57,11 +56,8 @@ public class CalculateRoute {
             
             for(Path pa : k.Naapurit){
                 pa.eval = evalvoi1(pa);
-                if(!katsotut.contains(pa))
-                    lisaaListalle(solmulista, pa);
+                lisaaListalle(solmulista, pa);
             }
-
-            katsotut.add(polku);
         }
     }
     
@@ -81,7 +77,10 @@ public class CalculateRoute {
         if(kaikki == true && p.b.nimi == 0)
             ret += 20;
         
-        ret += seuraavatPaikat(p);
+        if(edellinen == p.b)
+            ret -= 50;
+        
+        //ret += seuraavatPaikat(p);
         
         return ret;
     }
@@ -98,10 +97,15 @@ public class CalculateRoute {
     
     //Etsii seuraavan kaupungin seuraavat kaupungit
     private int seuraavatPaikat(Path p){
+        int ret = 0;
         if(p.b.visited == false)
-            return 10;
-        else
-            return 0;
+            ret += 10;
+        for(Path p2 : p.b.Naapurit){
+            if(p2.b.visited == false)
+                ret += 5;
+        }
+        
+        return ret;
     }
     
     public void lisaaListalle(LinkedList lista, Path p){ //Solmulistan päivitys

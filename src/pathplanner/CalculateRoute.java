@@ -16,6 +16,7 @@ public class CalculateRoute {
     
     LinkedList<Path> solmulista = new LinkedList<Path>();
     ArrayList<Kaupunki> vieraillut = new ArrayList<Kaupunki>();
+    ArrayList<Path> katsotut = new ArrayList<Path>();
     boolean kaikki = false;
     Path polku;
     
@@ -29,13 +30,14 @@ public class CalculateRoute {
 
         //Hakualgoritmi
         while(!solmulista.isEmpty()){
-
+            
             polku = solmulista.removeFirst();
+
             k = polku.b;
 
             if(k.nimi == 0 && kaikki == true){
                 System.out.println("Reitti löyty :)");
-                return;
+                break;
             }
 
 
@@ -55,8 +57,11 @@ public class CalculateRoute {
             
             for(Path pa : k.Naapurit){
                 pa.eval = evalvoi1(pa);
-                lisaaListalle(solmulista, pa);
+                if(!katsotut.contains(pa))
+                    lisaaListalle(solmulista, pa);
             }
+
+            katsotut.add(polku);
         }
     }
     
@@ -94,7 +99,7 @@ public class CalculateRoute {
     //Etsii seuraavan kaupungin seuraavat kaupungit
     private int seuraavatPaikat(Path p){
         if(p.b.visited == false)
-            return 3;
+            return 10;
         else
             return 0;
     }

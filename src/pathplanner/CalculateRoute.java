@@ -77,18 +77,18 @@ public class CalculateRoute {
         if(p.b.visited == false)
             ret += 5;
         if(p == lahinNaapuri(p.a))
-            ret += 2;
-        if(p.b.visited == false && p == lahinNaapuri(p.a))
             ret += 5;
-        if(p.b.visited == true)
-            ret -= 3;
+        if(p.b.visited == false && p == lahinNaapuri(p.a))
+            ret += 6;
+        if(p.b.visited == true && kaikki == false)
+            ret -= 5;
         if(kaikki == true && p.b.nimi == 0)
             ret += 20;
         
         if(edellinen == p.b)
-            ret -= 50;
+            ret -= 10;
         
-        //ret += seuraavatPaikat(p);
+
         
         return ret;
     }
@@ -101,19 +101,6 @@ public class CalculateRoute {
                 lyhin = p;
         }
         return lyhin;
-    }
-    
-    //Etsii seuraavan kaupungin seuraavat kaupungit
-    private int seuraavatPaikat(Path p){
-        int ret = 0;
-        if(p.b.visited == false)
-            ret += 10;
-        for(Path p2 : p.b.Naapurit){
-            if(p2.b.visited == false)
-                ret += 5;
-        }
-        
-        return ret;
     }
     
     public void lisaaListalle(LinkedList lista, Path p){ //Solmulistan päivitys

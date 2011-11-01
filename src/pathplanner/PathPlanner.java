@@ -20,7 +20,11 @@ public class PathPlanner {
         // TODO code application logic here
         ArrayList<Kaupunki> kaupungit;
         
-        kaupungit = reader.readFile("map.100");
+        if(args.length > 0)
+            kaupungit = reader.readFile(args[0]);
+        else
+            kaupungit = reader.readFile("map.100");
+        
         calculator.calculateRoute(kaupungit);
         
     }

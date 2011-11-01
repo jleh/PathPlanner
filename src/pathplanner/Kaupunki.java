@@ -13,6 +13,6 @@ import java.util.ArrayList;
 public class Kaupunki {
     public int nimi;
     public ArrayList<Path> Naapurit = new ArrayList<Path>();
-    
+    public boolean visited = false;
     
 }

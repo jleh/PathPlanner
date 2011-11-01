@@ -75,18 +75,24 @@ public class CalculateRoute {
         int ret = 0;
         
         if(p.b.visited == false)
-            ret += 5;
+            ret += 15;
         if(p == lahinNaapuri(p.a))
-            ret += 5;
+            ret += 10;
         if(p.b.visited == false && p == lahinNaapuri(p.a))
-            ret += 6;
+            ret += 25;
         if(p.b.visited == true && kaikki == false)
-            ret -= 5;
+            ret -= 10;
         if(kaikki == true && p.b.nimi == 0)
             ret += 20;
         
+        if(lahinNaapuri(p.b).b.nimi == 0)
+            ret += 50;
+        
+        if(lahinNaapuri(p.b).b.visited == false)
+            ret += 30;
+        
         if(edellinen == p.b)
-            ret -= 10;
+            ret -= 20;
         
 
         

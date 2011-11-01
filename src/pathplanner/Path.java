@@ -20,4 +20,8 @@ public class Path implements Comparable{
             throw new ClassCastException("Ei toimi");
         return this.eval - ((Path)o).eval;
     }
+    
+    public String toString(){
+        return a.nimi + " " + b.nimi + " " + eval;
+    }
 }

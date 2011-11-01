@@ -17,6 +17,7 @@ public class CalculateRoute {
     LinkedList<Path> solmulista = new LinkedList<Path>();
     ArrayList<Kaupunki> vieraillut = new ArrayList<Kaupunki>();
     boolean kaikki = false;
+    Path polku;
     
     public void calculateRoute(ArrayList<Kaupunki> lista){//Heuristinen etsintä
         Kaupunki k = lista.get(0);
@@ -27,11 +28,22 @@ public class CalculateRoute {
         
         //Hakualgoritmi
         while(!solmulista.isEmpty()){
-            k = solmulista.removeFirst().b;
-            System.out.println(k.nimi);
+            polku = solmulista.removeFirst();
+            k = polku.b;
             
-            if(vieraillut.size() == solmulista.size()) //Kun on käyty kaikissa
+            polku.eval = 0;
+            
+            if(!vieraillut.contains(k))
+                vieraillut.add(k);
+            
+            System.out.println("Nyk:" + k.nimi + " Vier:" + vieraillut.size()
+                    + " Listalla: " + solmulista.size() + " seur: " + solmulista.getFirst().toString()); //For debug
+            
+            if(vieraillut.size() == solmulista.size()){ //Kun on käyty kaikissa
                 kaikki = true;
+                System.out.println("Kaikissa käyty");
+                return;
+            }
             
             for(Path pa : k.Naapurit){
                 pa.eval = evalvoi1(pa);
@@ -46,11 +58,17 @@ public class CalculateRoute {
         int ret = 0;
         
         if(p.b.visited == false)
-            ret += 3;
+            ret += 5;
         if(p == lahinNaapuri(p.a))
             ret += 2;
         if(p.b.visited == false && p == lahinNaapuri(p.a))
             ret += 5;
+        if(p.b.visited == true)
+            ret -= 3;
+        if(kaikki == true && p.b.nimi == 0)
+            ret += 20;
+        
+        ret += seuraavatPaikat(p);
         
         return ret;
     }
@@ -65,7 +83,15 @@ public class CalculateRoute {
         return lyhin;
     }
     
-    public void lisaaListalle(LinkedList lista, Path p){
+    //Etsii seuraavan kaupungin seuraavat kaupungit
+    private int seuraavatPaikat(Path p){
+        if(p.b.visited == false)
+            return 3;
+        else
+            return 0;
+    }
+    
+    public void lisaaListalle(LinkedList lista, Path p){ //Solmulistan päivitys
         if(lista.contains(p))
             return;
         lista.add(p);

@@ -22,5 +22,6 @@ public class PathPlanner {
         
         kaupungit = reader.readFile("map.100");
         calculator.calculateRoute(kaupungit);
+        
     }
 }

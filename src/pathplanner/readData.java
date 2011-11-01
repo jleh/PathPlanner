@@ -66,7 +66,7 @@ public class readData {
     private void createCities(int lkm){
         Kaupunki k;
         
-        for(int i = 0; i < lkm+1; i++){
+        for(int i = 0; i < lkm; i++){
             k = new Kaupunki();
             k.nimi = i;
             kaupungit.add(k);

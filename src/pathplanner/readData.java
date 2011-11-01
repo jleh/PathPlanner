@@ -20,7 +20,7 @@ public class readData {
         String[] tokens;
         roads = 0;
         locations = 0;
-        Path p;
+        Path p, p1;
         int a, b;
         
         try{
@@ -43,15 +43,19 @@ public class readData {
                         createCities(locations); //Initialize cities
                     
                     p = new Path();
+                    p1 = new Path();
                     
                     a = Integer.parseInt(tokens[0]);
                     b = Integer.parseInt(tokens[1]);
                     
-                    p.a = kaupungit.get(a);
+                    p.a = kaupungit.get(a); //Reitti toimii molempiin suuntiin
                     p.b = kaupungit.get(b);
+                    p1.a = kaupungit.get(b);
+                    p1.b = kaupungit.get(a);
                     p.length = Integer.parseInt(tokens[2]);
+                    p1.length = Integer.parseInt(tokens[2]);
                     kaupungit.get(Integer.parseInt(tokens[0])).Naapurit.add(p);
-                    kaupungit.get(Integer.parseInt(tokens[1])).Naapurit.add(p);
+                    kaupungit.get(Integer.parseInt(tokens[1])).Naapurit.add(p1);
                 }
             }
             

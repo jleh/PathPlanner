@@ -25,12 +25,20 @@ public class CalculateRoute {
                 pa.eval = evalvoi1(pa);
                 lisaaListalle(solmulista, pa);
             }
-        
+
+
         //Hakualgoritmi
         while(!solmulista.isEmpty()){
+
             polku = solmulista.removeFirst();
             k = polku.b;
-            
+
+            if(k.nimi == 0 && kaikki == true){
+                System.out.println("Reitti löyty :)");
+                return;
+            }
+
+
             polku.eval = 0;
             
             if(!vieraillut.contains(k))

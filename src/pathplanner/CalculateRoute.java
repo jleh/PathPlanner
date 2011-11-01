@@ -20,38 +20,44 @@ public class CalculateRoute {
     Path polku;
     Kaupunki edellinen = new Kaupunki();
     
+    
     public void calculateRoute(ArrayList<Kaupunki> lista){//Heuristinen etsintä
         Kaupunki k = lista.get(0);
         for(Path pa : k.Naapurit){
-                pa.eval = evalvoi1(pa);
-                lisaaListalle(solmulista, pa);
-            }
+            pa.eval = evalvoi1(pa);
+            lisaaListalle(solmulista, pa);
+        }
 
-
-        //Hakualgoritmi
-               while(!solmulista.isEmpty()){
+        int matka = 0;
+        
+        System.out.println("0");
+        
+    //Hakualgoritmi
+        while(!solmulista.isEmpty()){
 
             polku = solmulista.removeFirst();
             k = polku.b;
 
-            if(k.nimi == 0 && kaikki == true){
-                System.out.println("Reitti löyty :)");
-                return;
+            System.out.println(k.nimi);
+            if(k.nimi == 0 && kaikki == true){ //Route is found
+                break;
             }
 
-
+            matka += polku.length;
             polku.eval = 0;
             
             if(!vieraillut.contains(k))
                 vieraillut.add(k);
             
-            System.out.println("Nyk:" + k.nimi + " Vier:" + vieraillut.size()
-                    + " Listalla: " + solmulista.size());// + " seur: " + solmulista.getFirst().toString()); //For debug
             
-            if(vieraillut.size() == solmulista.size()){ //Kun on käyty kaikissa
+            //Debug print
+            // System.out.println("Nyk:" + k.nimi + " Vier:" + vieraillut.size()
+            //         + " Listalla: " + solmulista.size() + " " + matka);// + " seur: " + solmulista.getFirst().toString()); //For debug
+            
+            if(vieraillut.size() == lista.size()){ //Kun on käyty kaikissa
                 kaikki = true;
-                System.out.println("Kaikissa käyty");
-                return;
+                //System.out.println("Kaikissa käyty");
+                //return;
             }
             
             for(Path pa : k.Naapurit){
@@ -59,6 +65,8 @@ public class CalculateRoute {
                 lisaaListalle(solmulista, pa);
             }
         }
+               
+        System.out.println("Total distance: " + matka);
     }
     
     

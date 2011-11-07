@@ -3,3 +3,6 @@
 *.class
 /build/
 /dist/
+/pathgen/nbproject/private/
+/pathgen/build/
+/pathgen/dist/

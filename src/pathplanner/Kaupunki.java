@@ -15,4 +15,6 @@ public class Kaupunki {
     public ArrayList<Path> Naapurit = new ArrayList<Path>();
     public boolean visited = false;
     public ArrayList<Kaupunki> edellinen = new ArrayList<Kaupunki>();
+    public int ddist;
+    public Kaupunki prev;
 }

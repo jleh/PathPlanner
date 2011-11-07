@@ -13,6 +13,7 @@ public class Path implements Comparable{
     public Kaupunki b;
     int length;
     int eval = 0;
+    Path prev;
 
     @Override
     public int compareTo(Object o) {

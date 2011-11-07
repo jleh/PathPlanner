@@ -4,6 +4,7 @@
  */
 package pathplanner;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -25,7 +26,18 @@ public class PathPlanner {
         else
             kaupungit = reader.readFile("map.100");
         
-        calculator.calculateRoute(kaupungit);
         
+        Tulos paras = new Tulos(Integer.MAX_VALUE, new LinkedList<Kaupunki>());
+        Tulos tulos;
+        for(int i = 0; i < 1000; i++){
+            tulos = calculator.calculateRoute(kaupungit);
+            if(tulos.pituus < paras.pituus)
+                paras = tulos;
+        }
+        System.out.println(paras.pituus);
+        for(Kaupunki k : paras.reitti)
+            System.out.println(k.nimi);
+        
+        //calculator.AStar(kaupungit, kaupungit.get(85));
     }
 }

@@ -1,6 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Tulosluokka
+ * 
  */
 package pathplanner;
 import java.util.LinkedList;

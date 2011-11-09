@@ -17,4 +17,5 @@ public class Kaupunki {
     public ArrayList<Kaupunki> edellinen = new ArrayList<Kaupunki>();
     public int ddist;
     public Kaupunki prev;
+    public int vierailut = 0;
 }

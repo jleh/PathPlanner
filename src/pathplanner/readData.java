@@ -76,4 +76,19 @@ public class readData {
             kaupungit.add(k);
         }
     }
+    
+    public void saveBest(Tulos paras){
+        PrintWriter kirjoitin;
+        
+        try {
+            kirjoitin = new PrintWriter(new FileOutputStream("tulos.txt"));
+            } catch(FileNotFoundException e) {
+                System.out.println("Virhe tiedostoissa");
+			return;
+            }
+        for(Kaupunki k : paras.reitti)
+            kirjoitin.println(k.nimi);
+        
+        kirjoitin.close();
+    }
 }

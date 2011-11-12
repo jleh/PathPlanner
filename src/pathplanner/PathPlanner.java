@@ -19,8 +19,9 @@ public class PathPlanner {
         int matka = 0;
         for(int i = 0; i < kaupungit.size()-1; i++){
             for(Path p : kaupungit.get(i).Naapurit){
-                if(p.b == kaupungit.get(i+1))
+                if(p.b == kaupungit.get(i+1)){
                     matka += p.length;
+                }
             }
         }
         
@@ -35,7 +36,7 @@ public class PathPlanner {
         
         System.out.println("Laskenta alkaa");
         
-        int iteraatiot;
+        int iteraatiot, parasInt = 0;
         
         if(args.length > 1){
             kaupungit = reader.readFile(args[0]);
@@ -50,28 +51,30 @@ public class PathPlanner {
         Tulos tulos;
         for(int i = 0; i < iteraatiot; i++){
             if(i % 100 == 0)
-                System.out.println("Lasketaan " + i + " paras tähän asti: " + paras.pituus);
+                System.out.println("Lasketaan " + i + " paras tähän asti: "  + parasInt);
             
-            if((tulos = calculator.calculateRoute(kaupungit, paras)) != null){
-                if(tulos.pituus < paras.pituus)
-                    paras = tulos;
+            tulos = null;
+            tulos = calculator.calculateRoute(kaupungit, paras);
+            
+            if(tulos != null){
+                if(laskePituus(tulos.reitti) < paras.pituus){
+                    paras.pituus = laskePituus(tulos.reitti);
+                    paras.reitti = tulos.reitti;
+                    
+                    //Kehitetään tulosta
+                    Kaupunki edellinen = calculator.kehitys(paras, null);
+                    for(int j = 1; j < kaupungit.size(); j++){
+                          edellinen = calculator.kehitys(paras, edellinen);
+                    }
+                    paras.pituus = laskePituus(paras.reitti);
+                    parasInt = paras.pituus;
+                    System.out.println("Lyhin " + paras.pituus + " " + paras.reitti.size());
+                    
+                    //Koodissa on jotain hämärää, antaa ilman tallennusta tässä
+                    //jotain aivan surkeaa
+                    reader.saveBest(paras);
+                }
             }
         }
-        System.out.println("Paras pituus: " + paras.pituus);  
-        System.out.println(laskePituus(paras.reitti) + " " + paras.reitti.size());
-        
-        //Kehitetään tulosta
-        Kaupunki edellinen = calculator.kehitys(paras, null);
-        for(int i = 1; i < kaupungit.size(); i++){
-           edellinen = calculator.kehitys(paras, edellinen);
-        }
-        calculator.kehitys(paras, edellinen);
-        
-        System.out.println(laskePituus(paras.reitti) + " " + paras.reitti.size());
-        //for(Kaupunki k : paras.reitti)
-        //    System.out.println(k.nimi);
-        
-        reader.saveBest(paras); //Tallennetaan tiedostioon
-        
     }
 }

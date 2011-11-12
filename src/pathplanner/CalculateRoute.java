@@ -27,6 +27,7 @@ public class CalculateRoute {
         //käyty, etsitään lyhin reitti takaisin lähtöpaikkaan A*-haulla
         int matka = 0;
         int loppu = 0;
+        edellinen = null;
         reitti.clear();
         vieraillut.clear();
         katsotut.clear();
@@ -34,35 +35,44 @@ public class CalculateRoute {
         alustaKaupungit(lista);
         Kaupunki k = lista.get(0);
         for(Path pa : k.Naapurit){
-            //pa.eval = evalvoi1(pa);
-            //lisaaListalle(solmulista, pa);
             solmulista.add(pa);
         }
         
         reitti.add(k);
         
-        //System.out.println("0");
-        LinkedList<Path> tulos = new LinkedList<Path>();
         Kaupunki viimeisin = k;
         
     //Hakualgoritmi
         while(true){
-            if(matka > paras.pituus) // Turha katsoa loppuun huonompia vaihtoehtoja
-                return null;
-            
             Collections.shuffle(solmulista);
             Path p = solmulista.getFirst();
+            boolean ekavaihe = false;
             
-            if(vieraillut.contains(p.b) || p.b == viimeisin) { 
-                Collections.shuffle(solmulista);
-                p = solmulista.getFirst();
+            for(Path pt : solmulista){ //Mennään ensin lähimpään käymättömään paikkaan
+                if(!vieraillut.contains(pt.b) && pt.length < p.length){
+                    p = pt;
+                    ekavaihe = true;
+                }
             }
-                
+            
+            if(ekavaihe == false){ //Jos äsken ei löytynyt paikkaa niin otetaan randomilla
+                //Collections.shuffle(solmulista);
+                p = solmulista.getFirst();
+
+                if(vieraillut.contains(p.b) || p.b == viimeisin) { 
+                    Collections.shuffle(solmulista);
+                    p = solmulista.removeFirst();
+                }
+
+                Path p2 = solmulista.removeFirst();
+                if(!vieraillut.contains(p2.b) || p2.b != viimeisin && p2.length < p.length)
+                    p = p2;
+            }
             
             Kaupunki kaupunki = p.b;
             matka += p.length;
             
-            reitti.add(kaupunki);
+            reitti.addLast(kaupunki);
             
             //System.out.println(kaupunki.nimi + " " + matka);
             if(!vieraillut.contains(kaupunki))
@@ -73,17 +83,16 @@ public class CalculateRoute {
             for(Path pa : kaupunki.Naapurit)
                 solmulista.add(pa);
             
-            if(vieraillut.size() == lista.size()){
+            if(vieraillut.size() == lista.size() && kaupunki.nimi == 0){
                 //vika = kaupunki;
-                loppu = AStar(kaupunki, tulos);
+                loppu = AStar(kaupunki, reitti); //Haetaan optimaalinen reitti loppuun
                 break;
             }
         }
                
-        //System.out.println("Total distance: " + matka + " " + loppu);
-        while(!tulos.isEmpty()){
-            reitti.addLast(tulos.removeLast().b);
-        }
+      //  while(!tulos.isEmpty()){
+      //      reitti.addLast(tulos.removeLast().b);
+      //  }
         return new Tulos(matka+loppu, reitti);
     }
     
@@ -113,7 +122,7 @@ public class CalculateRoute {
     private void alustaKaupungit(ArrayList<Kaupunki> lista){
         for(Kaupunki k : lista){
             k.visited = false;
-            k.vierailut = 0;
+            //k.vierailut = 0;
             for(Path p : k.Naapurit){
                 p.eval = 0;
                 p.prev = null;
@@ -205,7 +214,7 @@ public class CalculateRoute {
         //System.out.println(eniten.nimi + " " + eniten.vierailut + " " + eniten.Naapurit.size());
         
         int p = 0;
-        for(int i = 1; i < paras.reitti.size()-1; i++){
+        for(int i = 1; i < paras.reitti.size()-2; i++){
             if(paras.reitti.get(i) == eniten){
                 //System.out.println(paras.reitti.get(i-1).nimi + " " + paras.reitti.get(i+1).nimi);
                 if(onkoNaapureita(paras.reitti.get(i-1), paras.reitti.get(i+1))){

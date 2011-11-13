@@ -1,0 +1,2 @@
+Ohjelman käynnistys java -jar PathPlanner
+Parametreinä voidaan antaa syötetiedoston nimi ja reittihakujen määrä.
